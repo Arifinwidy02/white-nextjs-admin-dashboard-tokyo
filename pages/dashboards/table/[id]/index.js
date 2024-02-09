@@ -46,9 +46,15 @@ function DashboardTableEdit() {
     additionalURL: 'dashboard/status'
   });
 
-  const { data: dataDetail, loading: loadingDataDetails } = fetch({
-    additionalURL: 'dashboard/status'
+  const {
+    data: dataDetail,
+    loading: loadingDataDetails,
+    refetch
+  } = fetch({
+    defaultValue: {},
+    additionalURL: `dashboard/${+id}`
   });
+  console.log('dataDetail:', dataDetail);
 
   const { mutation, loading: loadingPost } = useMutation({
     method: 'post',
@@ -101,8 +107,16 @@ function DashboardTableEdit() {
   };
 
   useEffect(() => {}, [acDC]);
+  useEffect(() => {
+    // Fetch data only if the id is defined
+    if (id) {
+      refetch();
+    }
+  }, [id]); // Fetch data whenever the id changes
 
-  if (loading || loadingPost) {
+  const trueLoading = loadingDataDetails || loading || loadingPost;
+
+  if (trueLoading) {
     return (
       <div
         style={{
@@ -156,6 +170,7 @@ function DashboardTableEdit() {
                     id="outlined-password-input"
                     label="BTA-M-MIX-BB4-005"
                     type="text"
+                    value={dataDetail?.id_number}
                     style={{ marginLeft: -2 }}
                     {...register('id_number', { required: true })}
                   />
@@ -166,6 +181,7 @@ function DashboardTableEdit() {
                     id="outlined-password-input"
                     label="Toshiba"
                     type="text"
+                    value={dataDetail?.manufacturer}
                     {...register('manufacturer', { required: true })}
                   />
                   <Grid
@@ -182,6 +198,7 @@ function DashboardTableEdit() {
                         id="outlined-password-input"
                         label="460"
                         type="number"
+                        value={dataDetail?.voltage}
                         {...register('voltage', { required: true })}
                       />
                     </Grid>
@@ -193,6 +210,7 @@ function DashboardTableEdit() {
                         id="outlined-password-input"
                         label="20"
                         type="number"
+                        value={dataDetail?.hp}
                         {...register('hp', { required: true })}
                       />
                     </Grid>
@@ -202,14 +220,15 @@ function DashboardTableEdit() {
                         id="outlined-select-currency"
                         select
                         label="AC / DC"
-                        value={acDC}
+                        value={dataDetail?.ac_dc}
                         onChange={handleChange}
                         required
                       >
                         {acDcOption.map((option) => (
                           <MenuItem
+                            value={dataDetail?.ac_dc}
                             key={option.value}
-                            value={option.value}
+                            // value={option.value}
                             {...register('ac_dc')}
                           >
                             {option.label}
@@ -226,6 +245,7 @@ function DashboardTableEdit() {
                     id="outlined-password-input"
                     label="Mixer"
                     type="text"
+                    value={dataDetail?.remarks}
                     {...register('remarks', { required: true })}
                   />
                   <FormLabel component="legend">Status</FormLabel>
@@ -233,6 +253,7 @@ function DashboardTableEdit() {
                     row
                     aria-label="gender"
                     name="row-radio-buttons-group"
+                    value={dataDetail?.statusId}
                   >
                     {listStatus.map(({ description, id }) => {
                       return (
@@ -248,7 +269,7 @@ function DashboardTableEdit() {
                   <FormLabel component="legend" style={{ marginBottom: 5 }}>
                     Image Name Plate
                   </FormLabel>
-                  {uploadedImage ? (
+                  {uploadedImage || dataDetail?.imgUrl ? (
                     <>
                       <div style={{ position: 'relative' }}>
                         <Icon
@@ -271,7 +292,7 @@ function DashboardTableEdit() {
                           />
                         </Icon>
                         <img
-                          src={uploadedImage}
+                          src={uploadedImage || dataDetail?.imgUrl}
                           alt="Uploaded"
                           style={{
                             width: '100%',
@@ -288,6 +309,7 @@ function DashboardTableEdit() {
                         id="image-input"
                         // capture="camera"
                         type="file"
+                        value={dataDetail?.imgUrl}
                         style={{ display: 'none' }}
                         {...register('imgUrl', { required: true })}
                         onChange={handleImageUpload}

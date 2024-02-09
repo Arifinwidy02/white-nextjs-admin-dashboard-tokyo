@@ -10,11 +10,14 @@ import Image from 'next/image';
 import { DeleteRounded } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from 'next/link';
+import { useQRCode } from 'next-qrcode';
 
 const TableComponent = (route) => {
   const { data, ...propsTable } = route || {};
+  console.log('data:', data);
   const { handleDelete, type, tableHeadRepair } = propsTable || {};
   const [previewImage, setPreviewImage] = useState(null);
+  const { Image: ImageQR } = useQRCode();
 
   const handleImageClick = (imageUrl) => {
     setPreviewImage(imageUrl);
@@ -176,6 +179,40 @@ const TableComponent = (route) => {
                               height={40}
                               onClick={() => handleImageClick(item?.imgUrl)}
                               style={{ cursor: 'pointer' }}
+                            />
+                          </div>
+                        </td>
+                      );
+                    } else if ((key === 'qrcode') & item?.qrcode) {
+                      // Decode base64 string to data URL
+                      const imageUrl = `data:image/png;base64,${item?.qrcode}`;
+                      return (
+                        <td
+                          key={key}
+                          style={{
+                            // textAlign: alignTextDecider({ key }),
+                            padding: 5
+                          }}
+                        >
+                          <div
+                            style={{
+                              borderWidth: 1,
+                              borderRadius: 10,
+                              padding: 5,
+                              backgroundColor: colorDeciderForDashboard({
+                                status: item[key].description
+                              }),
+                              // width: 75,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              display: 'flex'
+                            }}
+                          >
+                            <Image
+                              src={imageUrl}
+                              alt="QR Code"
+                              width={200}
+                              height={200}
                             />
                           </div>
                         </td>
