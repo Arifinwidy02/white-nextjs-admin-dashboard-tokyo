@@ -12,7 +12,9 @@ import Link from 'src/components/Link';
 import Head from 'next/head';
 
 import Logo from 'src/components/LogoSign';
+import Goodyear from '../public/static/images/logo/goodyear-logo-vector.svg';
 import Hero from 'src/content/Overview/Hero';
+import Image from 'next/image';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -42,7 +44,14 @@ function Overview() {
       <HeaderWrapper>
         <Container maxWidth="lg">
           <Box display="flex" alignItems="center">
-            <Logo />
+            <div>
+              {/* <Image
+                width={50}
+                height={30}
+                alt="photo"
+                src={'/goodyear-logo-vector.svg'}
+              /> */}
+            </div>
             <Box
               display="flex"
               alignItems="center"
@@ -50,16 +59,16 @@ function Overview() {
               flex={1}
             >
               <Box />
-              <Box>
+              {/* <Box>
                 <Button
                   component={Link}
-                  href="/dashboards/crypto"
+                  href="/dashboards"
                   variant="contained"
                   sx={{ ml: 2 }}
                 >
                   Live Preview
                 </Button>
-              </Box>
+              </Box> */}
             </Box>
           </Box>
         </Container>
@@ -73,7 +82,7 @@ function Overview() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            BloomUI.com
+            Arifin Widyatmoko
           </Link>
         </Typography>
       </Container>

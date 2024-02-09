@@ -107,7 +107,7 @@ function Hero() {
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
-            Tokyo Free White Next.js Javascript Admin Dashboard
+            "goodyear" in a good stock management
           </TypographyH1>
           <TypographyH2
             sx={{ lineHeight: 1.5, pb: 4 }}
@@ -115,19 +115,18 @@ function Hero() {
             color="text.secondary"
             fontWeight="normal"
           >
-            High performance React template built with lots of powerful
-            Material-UI components across multiple product niches for fast &
-            perfect apps development processes
+            Unlocking the power of good management stock for sustainable growth
+            and success.
           </TypographyH2>
           <Button
             component={Link}
-            href="/dashboards/crypto"
+            href="/dashboards"
             size="large"
             variant="contained"
           >
-            Browse Live Preview
+            Let's Drive
           </Button>
-          <Button
+          {/* <Button
             sx={{ ml: 2 }}
             component="a"
             target="_blank"
@@ -137,8 +136,8 @@ function Hero() {
             variant="text"
           >
             Key Features
-          </Button>
-          <Grid container spacing={3} mt={5}>
+          </Button> */}
+          {/* <Grid container spacing={3} mt={5}>
             <Grid item md={4}>
               <MuiAvatar>
                 <img
@@ -187,7 +186,7 @@ function Hero() {
                 </Typography>
               </Typography>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </Container>

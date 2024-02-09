@@ -16,6 +16,7 @@ import { SidebarContext } from 'src/contexts/SidebarContext';
 import DesignServicesTwoToneIcon from '@mui/icons-material/DesignServicesTwoTone';
 import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
 import MmsTwoToneIcon from '@mui/icons-material/MmsTwoTone';
+import RepairIcon from '@mui/icons-material/Construction';
 import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import BallotTwoToneIcon from '@mui/icons-material/BallotTwoTone';
@@ -32,6 +33,8 @@ import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwo
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
 import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -187,9 +190,9 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <NextLink href="/" passHref>
+                <NextLink href="/dashboards" passHref>
                   <Button
-                    className={currentRoute === '="/' ? 'active' : ''}
+                    className={currentRoute === '="/dashboard' ? 'active' : ''}
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
@@ -212,12 +215,10 @@ function SidebarMenu() {
         >
           <SubMenuWrapper>
             <List component="div">
-              <ListItem component="div">
+              {/* <ListItem component="div">
                 <NextLink href="/dashboards/tasks" passHref>
                   <Button
-                    className={
-                      currentRoute === '/dashboards/crypto' ? 'active' : ''
-                    }
+                    className={currentRoute === '/dashboards' ? 'active' : ''}
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
@@ -226,8 +227,8 @@ function SidebarMenu() {
                     Cryptocurrency
                   </Button>
                 </NextLink>
-              </ListItem>
-              <ListItem component="div">
+              </ListItem> */}
+              {/* <ListItem component="div">
                 <NextLink href="/applications/messenger" passHref>
                   <Button
                     className={
@@ -241,11 +242,81 @@ function SidebarMenu() {
                     Messenger
                   </Button>
                 </NextLink>
+              </ListItem> */}
+              <ListItem component="div">
+                <NextLink href="/dashboards/table" passHref>
+                  <Button
+                    className={
+                      currentRoute === '/dashboards/table' ? 'active' : ''
+                    }
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<RepairIcon />}
+                  >
+                    Table All Motor
+                  </Button>
+                </NextLink>
+              </ListItem>
+              <ListItem component="div">
+                <NextLink href="/repair" passHref>
+                  <Button
+                    className={currentRoute === '/repair' ? 'active' : ''}
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<RepairIcon />}
+                  >
+                    Table Repair
+                  </Button>
+                </NextLink>
               </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
         <List
+          component="div"
+          subheader={
+            <ListSubheader component="div" disableSticky>
+              Motors
+            </ListSubheader>
+          }
+        >
+          <SubMenuWrapper>
+            <List component="div">
+              <ListItem component="div">
+                <NextLink href="/motors/create" passHref>
+                  <Button
+                    className={
+                      currentRoute === '/motors/create' ? 'active' : ''
+                    }
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<AddCircleOutlineIcon />}
+                  >
+                    Add New Motor
+                  </Button>
+                </NextLink>
+              </ListItem>
+              <ListItem component="div">
+                <NextLink href="/status/500" passHref>
+                  <Button
+                    className={currentRoute === '/status/500' ? 'active' : ''}
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<SwapHorizontalCircleIcon />}
+                  >
+                    Change Status Motor
+                  </Button>
+                </NextLink>
+              </ListItem>
+            </List>
+          </SubMenuWrapper>
+        </List>
+        {/* MANAGEMENT */}
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -274,8 +345,9 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
-        <List
+        </List> */}
+        {/* ACCOUNT */}
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -319,8 +391,9 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
-        <List
+        </List> */}
+        {/* COMPONENTS */}
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -467,7 +540,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
+        </List> */}
         <List
           component="div"
           subheader={
