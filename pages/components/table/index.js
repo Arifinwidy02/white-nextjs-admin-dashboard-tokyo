@@ -62,7 +62,7 @@ const TableComponent = (route) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((item) => {
+                {data.map((item, index) => {
                   const {
                     motor,
                     status,
