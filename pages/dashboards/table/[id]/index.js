@@ -38,7 +38,7 @@ const RootWrapper = styled(Box)(
 );
 function DashboardTableEdit() {
   const route = useRouter();
-  const { id } = route.query;
+  const { id = 1 } = route.query;
   const [uploadedImage, setUploadedImage] = useState(null);
   const [acDC, setACDC] = useState('AC');
   const [formValues, setFormValues] = useState({
