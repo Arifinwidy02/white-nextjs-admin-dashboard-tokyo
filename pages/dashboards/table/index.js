@@ -26,7 +26,6 @@ function DashboardTable() {
     formatter: (res) => res,
     additionalURL: `dashboard/?${optionalQuery}`
   });
-  console.log('data:', data);
 
   const {
     loading: loadingMutation,

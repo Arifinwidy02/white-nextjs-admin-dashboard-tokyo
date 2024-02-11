@@ -78,7 +78,7 @@ const TableComponent = (route) => {
                     qrcode
                   } = item;
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1}>
+                    <TableRow hover role="checkbox" key={index}>
                       <>
                         <TableCell key={index}>{index + 1}</TableCell>
 
