@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import { countingDataStatus } from '../../hooks/logic/dashbords';
 import { colorDeciderForDashboard } from '../../hooks/decider/decider';
 import Link from 'next/link';
+import { Loading } from '../components/loading';
+import isEmptyDataPerson from '../../public/animations/empty-data-person.json';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -31,20 +33,42 @@ function Dashboard() {
 
   useEffect(() => {
     getCountingDataStatus();
-  }, [data]);
+  }, []);
+  const isEmptyData = data.length < 1;
   if (loading) {
+    return <Loading />;
+  }
+
+  if (isEmptyData) {
     return (
       <div
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '100%'
+          height: '100%',
+          flexDirection: 'column',
+          marginTop: 25
         }}
       >
-        <div style={{ width: 250, height: 250 }}>
-          <Lottie animationData={NewLoadingAnimation} />
+        <Typography variant="h1" gutterBottom>
+          Ooopss..
+        </Typography>
+        <div style={{ width: 450, height: 450 }}>
+          <Lottie animationData={isEmptyDataPerson} />
         </div>
+        <Typography variant="subtitle2" gutterBottom>
+          We don't have any data yet
+        </Typography>
+        <Link href={'/motors/create'}>
+          <Typography
+            variant="subtitle2"
+            component="h1"
+            style={{ cursor: 'pointer' }}
+          >
+            Please add the data
+          </Typography>
+        </Link>
       </div>
     );
   }
@@ -67,13 +91,11 @@ function Dashboard() {
           justifyContent: 'flex-start',
           alignItems: 'center',
           flexWrap: 'wrap',
-          // width: '100%',
-          // backgroundColor: 'blue',
           marginTop: -20,
           marginLeft: 30
         }}
       >
-        {data.map(({ status, id_number, id }) => {
+        {data?.map(({ status, id_number, id }) => {
           return (
             <div
               key={id}
@@ -88,7 +110,7 @@ function Dashboard() {
               }}
             >
               <Link href={`/dashboards/table/${id}`}>
-                <div style={{ width: 100, height: 100 }}>
+                <div style={{ width: 100, height: 100, cursor: 'pointer' }}>
                   <Lottie animationData={MotorAnimation} />
                 </div>
               </Link>
