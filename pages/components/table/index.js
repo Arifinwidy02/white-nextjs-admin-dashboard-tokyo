@@ -43,7 +43,7 @@ const TableComponent = (route) => {
             >
               <TableHead>
                 <TableRow>
-                  {tableHead.map((column, index) => {
+                  {tableHead?.map((column, index) => {
                     return (
                       <TableCell
                         key={index}
@@ -62,7 +62,7 @@ const TableComponent = (route) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((item, index) => {
+                {data?.map((item, index) => {
                   const {
                     motor,
                     status,
