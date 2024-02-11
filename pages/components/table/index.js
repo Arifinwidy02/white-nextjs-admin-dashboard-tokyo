@@ -62,7 +62,7 @@ const TableComponent = (route) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((item, index) => {
+                {data.map((item) => {
                   const {
                     motor,
                     status,
@@ -78,21 +78,19 @@ const TableComponent = (route) => {
                     qrcode
                   } = item;
                   return (
-                    <TableRow hover role="checkbox" key={index}>
+                    <TableRow hover role="checkbox" key={item?.id}>
                       <>
-                        <TableCell key={index}>{index + 1}</TableCell>
+                        <TableCell>{index + 1}</TableCell>
 
-                        <TableCell key={index}>
-                          {motor?.id_number || id_number}
-                        </TableCell>
+                        <TableCell>{motor?.id_number || id_number}</TableCell>
                         {!!motorTable ? (
                           <>
-                            <TableCell key={index}>{remarks}</TableCell>
-                            <TableCell key={index}>{manufacturer}</TableCell>
-                            <TableCell key={index}>{voltage}</TableCell>
-                            <TableCell key={index}>{hp}</TableCell>
-                            <TableCell key={index}>{ac_dc}</TableCell>
-                            <TableCell key={index}>
+                            <TableCell>{remarks}</TableCell>
+                            <TableCell>{manufacturer}</TableCell>
+                            <TableCell>{voltage}</TableCell>
+                            <TableCell>{hp}</TableCell>
+                            <TableCell>{ac_dc}</TableCell>
+                            <TableCell>
                               {
                                 <Image
                                   src={imgUrl}
@@ -104,7 +102,7 @@ const TableComponent = (route) => {
                                 />
                               }
                             </TableCell>
-                            <TableCell key={index}>
+                            <TableCell>
                               {
                                 <Image
                                   src={`data:image/png;base64,${qrcode}`}
@@ -120,7 +118,7 @@ const TableComponent = (route) => {
                                 />
                               }
                             </TableCell>
-                            <TableCell key={index}>
+                            <TableCell>
                               {
                                 <div
                                   style={{
@@ -139,7 +137,7 @@ const TableComponent = (route) => {
                                 </div>
                               }
                             </TableCell>
-                            <TableCell key={index}>
+                            <TableCell>
                               {
                                 <div
                                   style={{
@@ -172,7 +170,7 @@ const TableComponent = (route) => {
                           </>
                         ) : (
                           <>
-                            <TableCell key={index}>
+                            <TableCell>
                               <div
                                 style={{
                                   borderWidth: 1,
@@ -189,12 +187,8 @@ const TableComponent = (route) => {
                                 {status?.description.toUpperCase()}
                               </div>
                             </TableCell>
-                            <TableCell key={index}>
-                              {dateFormatter(order_date)}
-                            </TableCell>
-                            <TableCell key={index}>
-                              {dateFormatter(finish_date)}
-                            </TableCell>
+                            <TableCell>{dateFormatter(order_date)}</TableCell>
+                            <TableCell>{dateFormatter(finish_date)}</TableCell>
                           </>
                         )}
                       </>
