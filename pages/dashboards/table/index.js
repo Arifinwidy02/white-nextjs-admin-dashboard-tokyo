@@ -14,6 +14,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/router';
+import EmptyData from '../../components/empty-data';
 function DashboardTable() {
   const [idtoDelete, setIdToDelete] = useState();
   const [previewImage, setPreviewImage] = useState(null);
@@ -110,12 +111,12 @@ function DashboardTable() {
     previewImage
   };
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [query]);
-
+  const isEmptyData = data.length < 1;
   if (loading) {
     return <Loading />;
+  }
+  if (isEmptyData) {
+    return <EmptyData />;
   }
   return (
     <>

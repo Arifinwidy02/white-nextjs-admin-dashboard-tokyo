@@ -1,18 +1,17 @@
-import Head from 'next/head';
-import SidebarLayout from 'src/layouts/SidebarLayout';
 import { Box, Typography, styled } from '@mui/material';
 import Lottie from 'lottie-react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import SidebarLayout from 'src/layouts/SidebarLayout';
 import { fetch } from '../../hooks/api';
-import NewLoadingAnimation from '../../public/animations/loading-new.json';
-import MotorAnimation from '../../public/animations/motor-list.json';
-import { useEffect, useState } from 'react';
-import { countingDataStatus } from '../../hooks/logic/dashbords';
 import { colorDeciderForDashboard } from '../../hooks/decider/decider';
-import Link from 'next/link';
+import { countingDataStatus } from '../../hooks/logic/dashbords';
+import MotorAnimation from '../../public/animations/motor-list.json';
+import EmptyData from '../components/empty-data';
 import { Loading } from '../components/loading';
-import isEmptyDataPerson from '../../public/animations/empty-data-person.json';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -40,37 +39,7 @@ function Dashboard() {
   }
 
   if (isEmptyData) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-          flexDirection: 'column',
-          marginTop: 25
-        }}
-      >
-        <Typography variant="h1" gutterBottom>
-          Ooopss..
-        </Typography>
-        <div style={{ width: 450, height: 450 }}>
-          <Lottie animationData={isEmptyDataPerson} />
-        </div>
-        <Typography variant="subtitle2" gutterBottom>
-          We don't have any data yet
-        </Typography>
-        <Link href={'/motors/create'}>
-          <Typography
-            variant="subtitle2"
-            component="h1"
-            style={{ cursor: 'pointer' }}
-          >
-            Please add the data
-          </Typography>
-        </Link>
-      </div>
-    );
+    return <EmptyData />;
   }
   return (
     <>

@@ -8,6 +8,7 @@ import SidebarLayout from 'src/layouts/SidebarLayout';
 import { fetch } from '../../hooks/api';
 import { Loading } from '../components/loading';
 import TableComponent from '../components/table';
+import EmptyData from '../components/empty-data';
 
 function RepairTable() {
   const { data, loading, refetch } = fetch({
@@ -15,8 +16,11 @@ function RepairTable() {
     formatter: (res) => res
   });
   const tableHead = ['NO', 'ID NUMBER', 'STATUS', 'ORDER DATE', 'FINISH DATE'];
-
+  const isEmptyData = data.length < 1;
   if (loading) return <Loading />;
+  if (isEmptyData) {
+    return <EmptyData />;
+  }
 
   const propsTable = { tableHead, type: 'repair' };
   return (
