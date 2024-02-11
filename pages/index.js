@@ -1,20 +1,10 @@
-import {
-  Typography,
-  Box,
-  Card,
-  Container,
-  Button,
-  styled
-} from '@mui/material';
+import { Box, Card, Container, Typography, styled } from '@mui/material';
 import BaseLayout from 'src/layouts/BaseLayout';
 
-import Link from 'src/components/Link';
 import Head from 'next/head';
+import Link from 'src/components/Link';
 
-import Logo from 'src/components/LogoSign';
-import Goodyear from '../public/static/images/logo/goodyear-logo-vector.svg';
 import Hero from 'src/content/Overview/Hero';
-import Image from 'next/image';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -39,19 +29,14 @@ function Overview() {
   return (
     <OverviewWrapper>
       <Head>
-        <title>Tokyo Free White NextJS Javascript Admin Dashboard</title>
+        <title>Stock motor good year</title>
       </Head>
       <HeaderWrapper>
         <Container maxWidth="lg">
           <Box display="flex" alignItems="center">
-            <div>
-              {/* <Image
-                width={50}
-                height={30}
-                alt="photo"
-                src={'/goodyear-logo-vector.svg'}
-              /> */}
-            </div>
+            {/* <div>
+             Logo should here
+            </div> */}
             <Box
               display="flex"
               alignItems="center"
@@ -59,16 +44,6 @@ function Overview() {
               flex={1}
             >
               <Box />
-              {/* <Box>
-                <Button
-                  component={Link}
-                  href="/dashboards"
-                  variant="contained"
-                  sx={{ ml: 2 }}
-                >
-                  Live Preview
-                </Button>
-              </Box> */}
             </Box>
           </Box>
         </Container>
