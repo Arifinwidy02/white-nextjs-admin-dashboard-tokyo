@@ -76,6 +76,7 @@ function Dashboard() {
         {data.map(({ status, id_number, id }) => {
           return (
             <div
+              key={id}
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -128,14 +129,17 @@ function Dashboard() {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {Object.keys(countingData).map((key) => {
               return (
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div
+                  style={{ display: 'flex', flexDirection: 'row' }}
+                  key={key}
+                >
                   <div
                     style={{
                       width: 50,
                       backgroundColor: colorDeciderForDashboard({
                         status: key
                       }),
-                      key: key,
+
                       marginRight: 10,
                       marginBottom: 5,
                       borderRadius: 5
