@@ -18,7 +18,7 @@ function Footer() {
       >
         <Box>
           <Typography variant="subtitle1">
-            &copy; 2022 - Tokyo Free White Next.js Javascript Admin Dashboard
+            &copy; Tokyo White Next.js Javascript Admin Dashboard
           </Typography>
         </Box>
         <Typography
@@ -28,13 +28,13 @@ function Footer() {
           variant="subtitle1"
         >
           Crafted by{' '}
-          <Link
+          {/* <Link
             href="https://bloomui.com"
             target="_blank"
             rel="noopener noreferrer"
-          >
-            BloomUI.com
-          </Link>
+          > */}
+          Arifin widyatmoko
+          {/* </Link> */}
         </Typography>
       </Box>
     </FooterWrapper>

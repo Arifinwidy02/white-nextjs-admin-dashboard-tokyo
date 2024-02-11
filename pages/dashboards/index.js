@@ -10,6 +10,7 @@ import MotorAnimation from '../../public/animations/motor-list.json';
 import { useEffect, useState } from 'react';
 import { countingDataStatus } from '../../hooks/logic/dashbords';
 import { colorDeciderForDashboard } from '../../hooks/decider/decider';
+import Link from 'next/link';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -72,7 +73,7 @@ function Dashboard() {
           marginLeft: 30
         }}
       >
-        {data.map(({ status }) => {
+        {data.map(({ status, id_number, id }) => {
           return (
             <div
               style={{
@@ -85,14 +86,22 @@ function Dashboard() {
                 marginBottom: 20
               }}
             >
-              <div style={{ width: 100, height: 100 }}>
-                <Lottie animationData={MotorAnimation} />
-              </div>
+              <Link href={`/dashboards/table/${id}`}>
+                <div style={{ width: 100, height: 100 }}>
+                  <Lottie animationData={MotorAnimation} />
+                </div>
+              </Link>
+              <Typography variant="caption" display="block" gutterBottom>
+                {id_number.toUpperCase()}
+              </Typography>
               <div
                 style={{
                   borderWidth: 1,
                   borderRadius: 10,
-                  padding: 5,
+                  paddingTop: 2,
+                  paddingRight: 2,
+                  paddingLeft: 2,
+                  paddingBottom: 0,
                   backgroundColor: colorDeciderForDashboard({
                     status: status?.description
                   }),
@@ -102,7 +111,8 @@ function Dashboard() {
                   display: 'flex'
                 }}
               >
-                <Typography variant="h5" component="h5">
+                {/* <Typography variant="h5" component="h5"> */}
+                <Typography variant="button" display="block" gutterBottom>
                   {status?.description.toUpperCase()}
                 </Typography>
               </div>

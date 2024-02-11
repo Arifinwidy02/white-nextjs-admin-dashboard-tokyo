@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export const baseUrl =
-  'https://stocks-motor-goodyear-bc7cb924ddfc.herokuapp.com';
+  'https://stocks-motor-goodyear-ee8ee0707c57.herokuapp.com';
 
 export const useMutation = ({
   method = 'get',
@@ -46,6 +46,7 @@ export const fetch = ({
   errorHandler = () => {},
   isLocalApi
 }) => {
+  console.log('additionalURL:', additionalURL);
   const url = `${baseUrl}/${additionalURL}`;
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(defaultValue);
@@ -56,7 +57,7 @@ export const fetch = ({
       const api = axios;
       const afterFetch = async (data) => {
         setData((prev) => formatter(data, prev));
-        afterSuccess && (await afterSuccess(data));
+        afterSuccess && (await afterSuccess(data, setData));
       };
       const { data } = await api.get(url, { params });
       await afterFetch(data);
