@@ -33,7 +33,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           > */}
-          Arifin widyatmoko
+          Christopher Roberto
           {/* </Link> */}
         </Typography>
       </Box>
