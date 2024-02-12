@@ -1,28 +1,28 @@
 import Head from 'next/head';
 
-import SidebarLayout from 'src/layouts/SidebarLayout';
-import PageHeader from 'src/content/Dashboards/Crypto/PageHeader';
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Container, Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import * as React from 'react';
 import Footer from 'src/components/Footer';
-import RepairIcon from '@mui/icons-material/Construction';
-import TableComponent from '../components/table';
+import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import SidebarLayout from 'src/layouts/SidebarLayout';
 import { fetch } from '../../hooks/api';
+import { Loading } from '../components/loading';
+import TableComponent from '../components/table';
+import EmptyData from '../components/empty-data';
 
 function RepairTable() {
   const { data, loading, refetch } = fetch({
     additionalURL: `dashboard/repair`,
     formatter: (res) => res
   });
-  console.log('data:', data);
-  const tableHeadRepair = [
-    'NO',
-    'ID NUMBER',
-    'STATUS',
-    'ORDER DATE',
-    'FINISH DATE'
-  ];
-  const propsTable = { tableHeadRepair, type: 'repair' };
+  const tableHead = ['NO', 'ID NUMBER', 'STATUS', 'ORDER DATE', 'FINISH DATE'];
+  const isEmptyData = data.length < 1;
+  if (loading) return <Loading />;
+  if (isEmptyData) {
+    return <EmptyData />;
+  }
+
+  const propsTable = { tableHead, type: 'repair' };
   return (
     <>
       <Head>
@@ -35,13 +35,7 @@ function RepairTable() {
           </Typography>
         </div>
       </PageTitleWrapper>
-      <div
-        style={{
-          paddingLeft: 30
-        }}
-      >
-        <TableComponent data={data} {...propsTable} />
-      </div>
+      <TableComponent data={data} {...propsTable} />
       <Footer />
     </>
   );

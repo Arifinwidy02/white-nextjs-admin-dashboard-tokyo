@@ -1,4 +1,5 @@
 import { PhotoCamera } from '@mui/icons-material';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {
   Box,
   Button,
@@ -6,6 +7,7 @@ import {
   CardHeader,
   Divider,
   FormControlLabel,
+  FormHelperText,
   FormLabel,
   Grid,
   Icon,
@@ -15,19 +17,18 @@ import {
   styled
 } from '@mui/material';
 import Radio from '@mui/material/Radio';
-import Lottie from 'lottie-react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import Footer from 'src/components/Footer';
 import SidebarLayout from 'src/layouts/SidebarLayout';
-import { baseUrl, fetch, useMutation } from '../../../../hooks/api';
-import NewLoadingAnimation from '../../../../public/animations/loading-new.json';
-import Form from '../../../components/forms/new-form';
-import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { finalDataFormatter } from '../../../../hooks/formatter/formatter';
 import Swal from 'sweetalert2';
-import { useRouter } from 'next/router';
+import { baseUrl, fetch, useMutation } from '../../../../hooks/api';
+import { finalDataFormatter } from '../../../../hooks/formatter/formatter';
+import { handleImageUploadFunction } from '../../../../hooks/logic/general';
+import Form from '../../../components/forms/new-form';
+import { Loading } from '../../../components/loading';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -37,10 +38,22 @@ const RootWrapper = styled(Box)(
 );
 function DashboardTableEdit() {
   const route = useRouter();
-  const { id } = route.query;
+  const { id = 1 } = route.query;
   const [uploadedImage, setUploadedImage] = useState(null);
   const [acDC, setACDC] = useState('AC');
-  const { handleSubmit, register, reset } = useForm();
+  const [formValues, setFormValues] = useState({
+    id_number: '',
+    manufacturer: '',
+    voltage: '',
+    hp: '',
+    ac_dc: 'AC',
+    remarks: '',
+    statusId: '',
+    imgUrl: ''
+  });
+  const { handleSubmit, register, formState } = useForm();
+
+  const { errors } = formState;
 
   const { data: listStatus, loading } = fetch({
     additionalURL: 'dashboard/status'
@@ -54,28 +67,26 @@ function DashboardTableEdit() {
     defaultValue: {},
     additionalURL: `dashboard/${+id}`
   });
-  console.log('dataDetail:', dataDetail);
 
   const { mutation, loading: loadingPost } = useMutation({
-    method: 'post',
-    url: `${baseUrl}/`,
+    method: 'put',
+    url: `${baseUrl}/dashboard/${id}`,
     afterSucces: (res) => {
       Swal.fire({
         text: res?.data?.message,
         icon: 'success'
       });
-      reset();
-      setUploadedImage(null);
+      route.push('/dashboards/table');
     }
   });
 
   const handleChange = (event) => {
-    setACDC(event.target.value);
+    const { name, value } = event.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value
+    }));
   };
-  const acDcOption = [
-    { label: 'AC', value: 'AC' },
-    { label: 'DC', value: 'DC' }
-  ];
 
   const onSubmit = (value, event) => {
     event.preventDefault();
@@ -84,53 +95,41 @@ function DashboardTableEdit() {
     // Convert specific fields to numbers
     const numberFields = ['voltage', 'hp', 'statusId'];
     numberFields.forEach((field) => {
-      if (value[field]) {
-        value[field] = parseInt(value[field]);
+      if (formValues[field]) {
+        formValues[field] = parseInt(formValues[field]);
       }
     });
-    const dataFormatter = finalDataFormatter(value);
+    const dataFormatter = finalDataFormatter(formValues);
     mutation(dataFormatter);
   };
 
   // Function to handle file input change
   const handleImageUpload = (event) => {
-    // const file = event.target.files[0]; // Get the first file from the input
-    // setUploadedImage(URL.createObjectURL(file)); // Store the file URL in state
-    const file = event.target.files[0]; // Get the first file from the input
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setUploadedImage(reader.result); // Set the uploaded image URL
-    };
-
-    reader.readAsDataURL(file); // Read the file as a data URL
+    handleImageUploadFunction({ event, setUploadedImage });
   };
+  const fillingFirstValue = () => {
+    setFormValues(dataDetail);
+  };
+
+  const acDcOption = [
+    { label: 'AC', value: 'AC' },
+    { label: 'DC', value: 'DC' }
+  ];
 
   useEffect(() => {}, [acDC]);
   useEffect(() => {
-    // Fetch data only if the id is defined
-    if (id) {
+    if (dataDetail) {
+      fillingFirstValue(dataDetail);
+    } else {
       refetch();
+      fillingFirstValue(dataDetail);
     }
-  }, [id]); // Fetch data whenever the id changes
+  }, [id, dataDetail]); // Fetch data whenever the id changes
 
   const trueLoading = loadingDataDetails || loading || loadingPost;
 
   if (trueLoading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%'
-        }}
-      >
-        <div style={{ width: 250, height: 250 }}>
-          <Lottie animationData={NewLoadingAnimation} />
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -167,22 +166,52 @@ function DashboardTableEdit() {
                   <FormLabel component="legend">ID Number</FormLabel>
                   <TextField
                     required
-                    id="outlined-password-input"
+                    id="id_number"
                     label="BTA-M-MIX-BB4-005"
                     type="text"
-                    value={dataDetail?.id_number}
+                    onChangeCapture={handleChange}
+                    value={formValues?.id_number}
                     style={{ marginLeft: -2 }}
-                    {...register('id_number', { required: true })}
+                    {...register('id_number', {
+                      required: formValues?.id_number ? false : true
+                    })}
+                    error={errors.id_number ? true : false}
+                    helperText={
+                      <FormHelperText
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: 'inherit',
+                          lineHeight: 'inherit'
+                        }}
+                      >
+                        {errors.id_number && 'ID Number is required'}
+                      </FormHelperText>
+                    }
                   />
                   <FormLabel component="legend">Manufacturer</FormLabel>
                   <TextField
                     style={{ marginLeft: -2 }}
                     required
-                    id="outlined-password-input"
+                    id="manufacturer"
                     label="Toshiba"
                     type="text"
-                    value={dataDetail?.manufacturer}
-                    {...register('manufacturer', { required: true })}
+                    value={formValues?.manufacturer}
+                    onChangeCapture={handleChange}
+                    {...register('manufacturer', {
+                      required: formValues?.manufacturer ? false : true
+                    })}
+                    error={errors.manufacturer ? true : false}
+                    helperText={
+                      <FormHelperText
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: 'inherit',
+                          lineHeight: 'inherit'
+                        }}
+                      >
+                        {errors.manufacturer && 'Manufacturer is required'}
+                      </FormHelperText>
+                    }
                   />
                   <Grid
                     container
@@ -195,11 +224,26 @@ function DashboardTableEdit() {
                       <TextField
                         style={{ marginLeft: -2 }}
                         required
-                        id="outlined-password-input"
+                        id="voltage"
                         label="460"
                         type="number"
-                        value={dataDetail?.voltage}
-                        {...register('voltage', { required: true })}
+                        onChangeCapture={handleChange}
+                        value={formValues?.voltage}
+                        {...register('voltage', {
+                          required: formValues?.voltage ? false : true
+                        })}
+                        error={errors.voltage ? true : false}
+                        helperText={
+                          <FormHelperText
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: 'inherit',
+                              lineHeight: 'inherit'
+                            }}
+                          >
+                            {errors.voltage && 'Voltage is required'}
+                          </FormHelperText>
+                        }
                       />
                     </Grid>
                     <Grid direction="column">
@@ -207,29 +251,51 @@ function DashboardTableEdit() {
                       <TextField
                         style={{ marginLeft: -2 }}
                         required
-                        id="outlined-password-input"
+                        id="hp"
                         label="20"
                         type="number"
-                        value={dataDetail?.hp}
-                        {...register('hp', { required: true })}
+                        value={formValues?.hp}
+                        onChangeCapture={handleChange}
+                        {...register('hp', {
+                          required: formValues?.hp ? false : true
+                        })}
+                        error={errors.hp ? true : false}
+                        helperText={
+                          <FormHelperText
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: 'inherit',
+                              lineHeight: 'inherit'
+                            }}
+                          >
+                            {errors.hp && 'HP is required'}
+                          </FormHelperText>
+                        }
                       />
                     </Grid>
                     <Grid direction="column">
                       <FormLabel component="legend">AC / DC</FormLabel>
                       <TextField
-                        id="outlined-select-currency"
+                        id="ac_dc"
                         select
                         label="AC / DC"
-                        value={dataDetail?.ac_dc}
-                        onChange={handleChange}
+                        value={formValues?.ac_dc?.toUpperCase()}
                         required
                       >
                         {acDcOption.map((option) => (
                           <MenuItem
-                            value={dataDetail?.ac_dc}
                             key={option.value}
-                            // value={option.value}
+                            value={option.value}
                             {...register('ac_dc')}
+                            onClick={() => {
+                              const event = {
+                                target: {
+                                  name: 'ac_dc',
+                                  value: option.value
+                                }
+                              };
+                              handleChange(event);
+                            }}
                           >
                             {option.label}
                           </MenuItem>
@@ -242,25 +308,42 @@ function DashboardTableEdit() {
                   <TextField
                     style={{ marginLeft: -2 }}
                     required
-                    id="outlined-password-input"
+                    id="remarks"
                     label="Mixer"
                     type="text"
-                    value={dataDetail?.remarks}
-                    {...register('remarks', { required: true })}
+                    value={formValues?.remarks}
+                    onChangeCapture={handleChange}
+                    {...register('remarks', {
+                      required: formValues?.remarks ? false : true
+                    })}
+                    error={errors.remarks ? true : false}
+                    helperText={
+                      <FormHelperText
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: 'inherit',
+                          lineHeight: 'inherit'
+                        }}
+                      >
+                        {errors.remarks && 'Remarks is required'}
+                      </FormHelperText>
+                    }
                   />
                   <FormLabel component="legend">Status</FormLabel>
                   <RadioGroup
                     row
                     aria-label="gender"
                     name="row-radio-buttons-group"
-                    value={dataDetail?.statusId}
+                    value={formValues?.statusId}
                   >
-                    {listStatus.map(({ description, id }) => {
+                    {listStatus.map(({ description, id }, index) => {
                       return (
                         <FormControlLabel
+                          key={index}
                           value={id}
                           control={<Radio />}
                           label={description.toUpperCase()}
+                          onChangeCapture={handleChange}
                           {...register('statusId', { required: true })}
                         />
                       );
@@ -269,7 +352,7 @@ function DashboardTableEdit() {
                   <FormLabel component="legend" style={{ marginBottom: 5 }}>
                     Image Name Plate
                   </FormLabel>
-                  {uploadedImage || dataDetail?.imgUrl ? (
+                  {uploadedImage || formValues?.imgUrl ? (
                     <>
                       <div style={{ position: 'relative' }}>
                         <Icon
@@ -283,7 +366,13 @@ function DashboardTableEdit() {
                           }}
                         >
                           <CancelIcon
-                            onClick={() => setUploadedImage(null)}
+                            onClick={() => {
+                              setFormValues((prev) => ({
+                                ...prev,
+                                imgUrl: null
+                              }));
+                              setUploadedImage(null);
+                            }}
                             style={{
                               width: 30,
                               height: 30,
@@ -292,7 +381,7 @@ function DashboardTableEdit() {
                           />
                         </Icon>
                         <img
-                          src={uploadedImage || dataDetail?.imgUrl}
+                          src={uploadedImage || formValues?.imgUrl}
                           alt="Uploaded"
                           style={{
                             width: '100%',
@@ -309,7 +398,7 @@ function DashboardTableEdit() {
                         id="image-input"
                         // capture="camera"
                         type="file"
-                        value={dataDetail?.imgUrl}
+                        value={formValues?.imgUrl}
                         style={{ display: 'none' }}
                         {...register('imgUrl', { required: true })}
                         onChange={handleImageUpload}

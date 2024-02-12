@@ -1,300 +1,206 @@
-import React, { useState } from 'react';
-import { filterKeys } from '../../../hooks/formatter/formatter';
+import { DeleteRounded } from '@mui/icons-material';
+import EditIcon from '@mui/icons-material/Edit';
 import {
-  alignTextDecider,
+  Button,
+  Container,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import {
   colorDeciderForDashboard,
   typeTable
 } from '../../../hooks/decider/decider';
-import { Button, Container, Typography } from '@mui/material';
-import Image from 'next/image';
-import { DeleteRounded } from '@mui/icons-material';
-import EditIcon from '@mui/icons-material/Edit';
-import Link from 'next/link';
-import { useQRCode } from 'next-qrcode';
+import { dateFormatter, filterKeys } from '../../../hooks/formatter/formatter';
 
 const TableComponent = (route) => {
   const { data, ...propsTable } = route || {};
-  console.log('data:', data);
-  const { handleDelete, type, tableHeadRepair } = propsTable || {};
-  const [previewImage, setPreviewImage] = useState(null);
-  const { Image: ImageQR } = useQRCode();
+  const {
+    handleDelete,
+    type,
+    tableHead,
+    handleClosePreview = () => {},
+    handleImageClick = () => {},
+    previewImage = false
+  } = propsTable || {};
+  const { motorTable } = typeTable(type);
 
-  const handleImageClick = (imageUrl) => {
-    setPreviewImage(imageUrl);
-  };
-
-  const handleClosePreview = () => {
-    setPreviewImage(null);
-  };
-
-  const keysToExclude = [
-    'updatedAt',
-    'createdAt',
-    'statusId',
-    'isHiddenMotor',
-    'qrcode'
-  ];
-  const filteredData = filterKeys(data, keysToExclude);
-  const isEmptyTable = filteredData.length < 1;
-  const { repairTable, motorTable } = typeTable(type);
   return (
-    <div>
+    <>
       <Container maxWidth="lg">
-        <table
-          className="table-autor"
-          style={{ width: '100%', marginLeft: -25 }}
-        >
-          <thead>
-            <tr>
-              {repairTable ? (
-                <>
-                  {tableHeadRepair?.map((item, index) => {
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table
+              stickyHeader={previewImage ? false : true}
+              aria-label="sticky table"
+            >
+              <TableHead>
+                <TableRow>
+                  {tableHead?.map((column, index) => {
                     return (
-                      <th
+                      <TableCell
                         key={index}
-                        style={{
-                          justifyContent: 'start',
-                          alignItems: 'start',
-                          backgroundColor: '#C7C8CC',
-
-                          padding: 5
-                        }}
+                        align={
+                          motorTable
+                            ? 'center'
+                            : column == 'STATUS'
+                            ? 'center'
+                            : 'left'
+                        }
                       >
-                        {item}
-                      </th>
+                        {column}
+                      </TableCell>
                     );
                   })}
-                </>
-              ) : (
-                <>
-                  <th style={{ backgroundColor: '#C7C8CC' }}>NO</th>
-                  {filteredData.length > 0 &&
-                    Object.keys(filteredData[0]).map((key) => {
-                      if (key !== 'no' && key !== 'id') {
-                        return (
-                          <th
-                            key={key}
-                            style={{
-                              justifyContent: 'start',
-                              alignItems: 'start',
-                              backgroundColor: '#C7C8CC',
-
-                              padding: 5
-                            }}
-                          >
-                            {key.toUpperCase()}
-                          </th>
-                        );
-                      }
-                      return null;
-                    })}
-                  <th style={{ backgroundColor: '#C7C8CC' }}>Action</th>
-                </>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {Boolean(isEmptyTable) && (
-              <tr>
-                {tableHeadRepair?.map((item) => {
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data?.map((item, index) => {
+                  const {
+                    motor,
+                    status,
+                    order_date,
+                    finish_date,
+                    id_number,
+                    remarks,
+                    manufacturer,
+                    voltage,
+                    hp,
+                    ac_dc,
+                    imgUrl,
+                    qrcode
+                  } = item;
                   return (
-                    <td
-                      style={{
-                        textAlign: 'center',
-                        padding: 5,
-                        backgroundColor: 'white'
-                      }}
-                    >
-                      {' '}
-                      -{' '}
-                    </td>
+                    <TableRow hover role="checkbox" key={item?.id}>
+                      <>
+                        <TableCell>{index + 1}</TableCell>
+
+                        <TableCell>{motor?.id_number || id_number}</TableCell>
+                        {!!motorTable ? (
+                          <>
+                            <TableCell>{remarks}</TableCell>
+                            <TableCell>{manufacturer}</TableCell>
+                            <TableCell>{voltage}</TableCell>
+                            <TableCell>{hp}</TableCell>
+                            <TableCell>{ac_dc}</TableCell>
+                            <TableCell>
+                              {
+                                <Image
+                                  src={imgUrl}
+                                  alt="photo"
+                                  width={100}
+                                  height={100}
+                                  onClick={() => handleImageClick(imgUrl)}
+                                  style={{ cursor: 'pointer' }}
+                                />
+                              }
+                            </TableCell>
+                            <TableCell>
+                              {
+                                <Image
+                                  src={`data:image/png;base64,${qrcode}`}
+                                  alt="QR Code"
+                                  width={100}
+                                  height={100}
+                                  onClick={() =>
+                                    handleImageClick(
+                                      `data:image/png;base64,${qrcode}`
+                                    )
+                                  }
+                                  style={{ cursor: 'pointer' }}
+                                />
+                              }
+                            </TableCell>
+                            <TableCell>
+                              {
+                                <div
+                                  style={{
+                                    borderWidth: 1,
+                                    borderRadius: 10,
+                                    padding: 5,
+                                    backgroundColor: colorDeciderForDashboard({
+                                      status: status?.description
+                                    }),
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    display: 'flex'
+                                  }}
+                                >
+                                  {status?.description.toUpperCase()}
+                                </div>
+                              }
+                            </TableCell>
+                            <TableCell>
+                              {
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    gap: 5
+                                  }}
+                                >
+                                  <Button
+                                    variant="outlined"
+                                    startIcon={<DeleteRounded />}
+                                    onClick={() => handleDelete(item)}
+                                  >
+                                    Delete
+                                  </Button>
+                                  <Link
+                                    href={`/dashboards/table/${item?.id}`}
+                                    key={item.id}
+                                  >
+                                    <Button
+                                      variant="outlined"
+                                      startIcon={<EditIcon />}
+                                    >
+                                      Edit
+                                    </Button>
+                                  </Link>
+                                </div>
+                              }
+                            </TableCell>
+                          </>
+                        ) : (
+                          <>
+                            <TableCell>
+                              <div
+                                style={{
+                                  borderWidth: 1,
+                                  borderRadius: 10,
+                                  padding: 5,
+                                  backgroundColor: colorDeciderForDashboard({
+                                    status: status?.description
+                                  }),
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  display: 'flex'
+                                }}
+                              >
+                                {status?.description.toUpperCase()}
+                              </div>
+                            </TableCell>
+                            <TableCell>{dateFormatter(order_date)}</TableCell>
+                            <TableCell>{dateFormatter(finish_date)}</TableCell>
+                          </>
+                        )}
+                      </>
+                    </TableRow>
                   );
                 })}
-              </tr>
-            )}
-            {filteredData.map((item, index) => {
-              return (
-                <tr>
-                  <td style={{ textAlign: 'center', padding: 5 }}>{item.no}</td>
-                  {Object.keys(item).map((key) => {
-                    if (key === 'status') {
-                      return (
-                        <td
-                          key={key}
-                          style={{
-                            textAlign: alignTextDecider({ key }),
-                            padding: 5
-                          }}
-                        >
-                          <div
-                            style={{
-                              borderWidth: 1,
-                              borderRadius: 10,
-                              padding: 5,
-                              backgroundColor: colorDeciderForDashboard({
-                                status: item[key].description
-                              }),
-                              // width: 75,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              display: 'flex'
-                            }}
-                          >
-                            {/* <Typography variant="h5" component="h5"> */}
-                            {item[key].description.toUpperCase()}
-                            {/* </Typography> */}
-                          </div>
-                        </td>
-                      );
-                    } else if (
-                      (key === 'imgUrl') &
-                      !item?.imgUrl.startsWith('..')
-                    ) {
-                      return (
-                        <td
-                          key={key}
-                          style={{
-                            // textAlign: alignTextDecider({ key }),
-                            padding: 5
-                          }}
-                        >
-                          <div
-                            style={{
-                              borderWidth: 1,
-                              borderRadius: 10,
-                              padding: 5,
-                              backgroundColor: colorDeciderForDashboard({
-                                status: item[key].description
-                              }),
-                              // width: 75,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              display: 'flex'
-                            }}
-                          >
-                            <Image
-                              src={item?.imgUrl}
-                              alt="photo"
-                              width={70}
-                              height={40}
-                              onClick={() => handleImageClick(item?.imgUrl)}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </div>
-                        </td>
-                      );
-                    } else if ((key === 'qrcode') & item?.qrcode) {
-                      // Decode base64 string to data URL
-                      const imageUrl = `data:image/png;base64,${item?.qrcode}`;
-                      return (
-                        <td
-                          key={key}
-                          style={{
-                            // textAlign: alignTextDecider({ key }),
-                            padding: 5
-                          }}
-                        >
-                          <div
-                            style={{
-                              borderWidth: 1,
-                              borderRadius: 10,
-                              padding: 5,
-                              backgroundColor: colorDeciderForDashboard({
-                                status: item[key].description
-                              }),
-                              // width: 75,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              display: 'flex'
-                            }}
-                          >
-                            <Image
-                              src={imageUrl}
-                              alt="QR Code"
-                              width={200}
-                              height={200}
-                            />
-                          </div>
-                        </td>
-                      );
-                    } else if (key !== 'no' && key !== 'id') {
-                      const value = item[key];
-                      return (
-                        <td
-                          key={key}
-                          className="px-5"
-                          style={{
-                            textAlign: alignTextDecider({ key }),
-                            padding: 5
-                          }}
-                        >
-                          {typeof value === 'object'
-                            ? JSON.stringify(value)
-                            : value}
-                        </td>
-                      );
-                    }
-                    return null;
-                  })}
-                  {Boolean(motorTable) && (
-                    <>
-                      <td style={{ textAlign: 'center', padding: 5 }}>
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: 5
-                          }}
-                        >
-                          <Button
-                            variant="outlined"
-                            startIcon={<DeleteRounded />}
-                            onClick={() => handleDelete(item)}
-                          >
-                            Delete
-                          </Button>
-                          <Link
-                            href={`/dashboards/table/${item?.id}`}
-                            key={item.id}
-                          >
-                            <Button variant="outlined" startIcon={<EditIcon />}>
-                              Edit
-                            </Button>
-                          </Link>
-                        </div>
-                      </td>
-                    </>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Container>
-      {previewImage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-          onClick={handleClosePreview}
-        >
-          <img
-            src={previewImage}
-            alt="Preview"
-            style={{ maxWidth: '80%', maxHeight: '80%', cursor: 'pointer' }}
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking on the image
-          />
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

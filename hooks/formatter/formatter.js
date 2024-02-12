@@ -1,3 +1,6 @@
+import imageCompression from 'browser-image-compression';
+import { format } from 'date-fns';
+
 export function filterKeys(dataArray, keysToExclude) {
   return dataArray.map((obj, index) => {
     const filteredObj = {};
@@ -28,4 +31,32 @@ export function finalDataFormatter(data) {
     result.ac_dc = 'ac';
   }
   return result;
+}
+
+export const compressImage = async (file, setUploadedImage) => {
+  // Calculate the maxSizeMB for compression to achieve approximately 70 KB
+  const maxSizeMB = 0.07; // Convert 70 KB to MB (1 MB = 1024 KB)
+
+  // Compress the image
+  const options = {
+    maxSizeMB: maxSizeMB, // Max size in megabytes
+    maxWidthOrHeight: 800, // Max width or height
+    useWebWorker: true // Use WebWorker for faster compression (optional)
+  };
+
+  const compressedFile = await imageCompression(file, options);
+
+  // Convert compressedFile to data URL
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    setUploadedImage(reader.result); // Set the uploaded image URL
+  };
+  reader.readAsDataURL(compressedFile); // Read the file as a data URL
+};
+
+export function dateFormatter(date) {
+  if (!date) return '-';
+  const newDate = new Date(date);
+  const formattedDate = format(newDate, 'MMM d,yyyy, HH:mm:ss');
+  return formattedDate;
 }

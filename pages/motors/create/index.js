@@ -25,8 +25,13 @@ import Form from '../../components/forms/new-form';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { finalDataFormatter } from '../../../hooks/formatter/formatter';
+import {
+  compressImage,
+  finalDataFormatter
+} from '../../../hooks/formatter/formatter';
 import Swal from 'sweetalert2';
+import { handleImageUploadFunction } from '../../../hooks/logic/general';
+import { Loading } from '../../components/loading';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -68,7 +73,6 @@ function CreateMotor() {
     event.preventDefault();
     // Add the URL of the uploaded image to the value object
     value.imgUrl = uploadedImage;
-    console.log('uploadedImage:', uploadedImage);
     // Convert specific fields to numbers
     const numberFields = ['voltage', 'hp', 'statusId'];
     numberFields.forEach((field) => {
@@ -80,37 +84,13 @@ function CreateMotor() {
     mutation(dataFormatter);
   };
 
-  // Function to handle file input change
-  const handleImageUpload = (event) => {
-    // const file = event.target.files[0]; // Get the first file from the input
-    // setUploadedImage(URL.createObjectURL(file)); // Store the file URL in state
-    const file = event.target.files[0]; // Get the first file from the input
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setUploadedImage(reader.result); // Set the uploaded image URL
-    };
-
-    reader.readAsDataURL(file); // Read the file as a data URL
+  const handleImageUpload = async (event) => {
+    handleImageUploadFunction({ event, setUploadedImage });
   };
-
   useEffect(() => {}, [acDC]);
 
   if (loading || loadingPost) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%'
-        }}
-      >
-        <div style={{ width: 250, height: 250 }}>
-          <Lottie animationData={NewLoadingAnimation} />
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -228,9 +208,10 @@ function CreateMotor() {
                     aria-label="gender"
                     name="row-radio-buttons-group"
                   >
-                    {listStatus.map(({ description, id }) => {
+                    {listStatus.map(({ description, id }, index) => {
                       return (
                         <FormControlLabel
+                          key={index}
                           value={id}
                           control={<Radio />}
                           label={description.toUpperCase()}

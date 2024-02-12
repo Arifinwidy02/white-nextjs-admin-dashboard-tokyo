@@ -300,9 +300,11 @@ function SidebarMenu() {
                 </NextLink>
               </ListItem>
               <ListItem component="div">
-                <NextLink href="/status/500" passHref>
+                <NextLink href="/motors/change-status" passHref>
                   <Button
-                    className={currentRoute === '/status/500' ? 'active' : ''}
+                    className={
+                      currentRoute === '/motors/change-status' ? 'active' : ''
+                    }
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
@@ -541,7 +543,7 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List> */}
-        <List
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -609,7 +611,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
+        </List> */}
       </MenuWrapper>
     </>
   );

@@ -1,15 +1,17 @@
-import Head from 'next/head';
-import SidebarLayout from 'src/layouts/SidebarLayout';
 import { Box, Typography, styled } from '@mui/material';
 import Lottie from 'lottie-react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import SidebarLayout from 'src/layouts/SidebarLayout';
 import { fetch } from '../../hooks/api';
-import NewLoadingAnimation from '../../public/animations/loading-new.json';
-import MotorAnimation from '../../public/animations/motor-list.json';
-import { useEffect, useState } from 'react';
-import { countingDataStatus } from '../../hooks/logic/dashbords';
 import { colorDeciderForDashboard } from '../../hooks/decider/decider';
+import { countingDataStatus } from '../../hooks/logic/dashbords';
+import MotorAnimation from '../../public/animations/motor-list.json';
+import EmptyData from '../components/empty-data';
+import { Loading } from '../components/loading';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -30,22 +32,14 @@ function Dashboard() {
 
   useEffect(() => {
     getCountingDataStatus();
-  }, [data]);
+  }, []);
+  const isEmptyData = data.length < 1;
   if (loading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%'
-        }}
-      >
-        <div style={{ width: 250, height: 250 }}>
-          <Lottie animationData={NewLoadingAnimation} />
-        </div>
-      </div>
-    );
+    return <Loading />;
+  }
+
+  if (isEmptyData) {
+    return <EmptyData />;
   }
   return (
     <>
@@ -66,15 +60,14 @@ function Dashboard() {
           justifyContent: 'flex-start',
           alignItems: 'center',
           flexWrap: 'wrap',
-          // width: '100%',
-          // backgroundColor: 'blue',
           marginTop: -20,
           marginLeft: 30
         }}
       >
-        {data.map(({ status }) => {
+        {data?.map(({ status, id_number, id }) => {
           return (
             <div
+              key={id}
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -85,14 +78,22 @@ function Dashboard() {
                 marginBottom: 20
               }}
             >
-              <div style={{ width: 100, height: 100 }}>
-                <Lottie animationData={MotorAnimation} />
-              </div>
+              <Link href={`/dashboards/table/${id}`}>
+                <div style={{ width: 100, height: 100, cursor: 'pointer' }}>
+                  <Lottie animationData={MotorAnimation} />
+                </div>
+              </Link>
+              <Typography variant="caption" display="block" gutterBottom>
+                {id_number.toUpperCase()}
+              </Typography>
               <div
                 style={{
                   borderWidth: 1,
                   borderRadius: 10,
-                  padding: 5,
+                  paddingTop: 2,
+                  paddingRight: 2,
+                  paddingLeft: 2,
+                  paddingBottom: 0,
                   backgroundColor: colorDeciderForDashboard({
                     status: status?.description
                   }),
@@ -102,7 +103,8 @@ function Dashboard() {
                   display: 'flex'
                 }}
               >
-                <Typography variant="h5" component="h5">
+                {/* <Typography variant="h5" component="h5"> */}
+                <Typography variant="button" display="block" gutterBottom>
                   {status?.description.toUpperCase()}
                 </Typography>
               </div>
@@ -118,14 +120,17 @@ function Dashboard() {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {Object.keys(countingData).map((key) => {
               return (
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div
+                  style={{ display: 'flex', flexDirection: 'row' }}
+                  key={key}
+                >
                   <div
                     style={{
                       width: 50,
                       backgroundColor: colorDeciderForDashboard({
                         status: key
                       }),
-                      key: key,
+
                       marginRight: 10,
                       marginBottom: 5,
                       borderRadius: 5
