@@ -58,7 +58,7 @@ function Overview() {
           </Box>
         </Container>
       </HeaderWrapper>
-      {/* <Hero /> */}
+      <Hero />
       <Container maxWidth="lg" sx={{ mt: 8 }}>
         <Typography textAlign="center" variant="subtitle1">
           Crafted by{' '}
