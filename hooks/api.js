@@ -46,7 +46,6 @@ export const fetch = ({
   errorHandler = () => {},
   isLocalApi
 }) => {
-  console.log('additionalURL:', additionalURL);
   const url = `${baseUrl}/${additionalURL}`;
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(defaultValue);
