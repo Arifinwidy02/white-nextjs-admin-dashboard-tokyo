@@ -35,6 +35,7 @@ import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -252,9 +253,9 @@ function SidebarMenu() {
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
-                    startIcon={<RepairIcon />}
+                    startIcon={<MiscellaneousServicesIcon />}
                   >
-                    Table All Motor
+                    Motors
                   </Button>
                 </NextLink>
               </ListItem>

@@ -60,3 +60,12 @@ export function dateFormatter(date) {
   const formattedDate = format(newDate, 'MMM d,yyyy, HH:mm:ss');
   return formattedDate;
 }
+
+export const formatterSortName = async (item) => {
+  if (item == 'ID NUMBER') return 'id_number';
+  if (item == 'REMARKS') return 'remarks';
+  if (item == 'MANUFACTURER') return 'manufacturer';
+  if (item == 'VOLTAGE') return 'voltage';
+  if (item == 'HP') return 'hp';
+  if (item == 'AC/DC') return 'ac_dc';
+};
