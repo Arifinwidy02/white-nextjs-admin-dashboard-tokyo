@@ -60,15 +60,9 @@ const UserBoxDescription = styled(Typography)(
 
 function HeaderUserbox() {
   const user = {
-<<<<<<< HEAD
     name: 'Admin',
     avatar: '/static/images/avatars/gYB.png',
     jobtitle: 'Reliability Engineering'
-=======
-    name: 'Christopher',
-    avatar: '/static/images/avatars/gyBlimp.jpg',
-    jobtitle: 'Reliability Engineer'
->>>>>>> d420f7520e83a0e78706bda531f593d2a03b644b
   };
 
   const ref = useRef(null);
