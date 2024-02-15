@@ -1,33 +1,44 @@
+import SearchIcon from '@mui/icons-material/Search';
 import { Container, Typography } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
+import Paper from '@mui/material/Paper';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SidebarLayout from 'src/layouts/SidebarLayout';
 import Swal from 'sweetalert2';
 import { baseUrl, fetch, useMutation } from '../../../hooks/api';
+import { formatterSortName } from '../../../hooks/formatter/formatter';
+import EmptyData from '../../components/empty-data';
 import { Loading } from '../../components/loading';
 import TableComponent from '../../components/table';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import { useRouter } from 'next/router';
-import EmptyData from '../../components/empty-data';
 function DashboardTable() {
   const [idtoDelete, setIdToDelete] = useState();
   const [previewImage, setPreviewImage] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [search, setSearch] = useState('');
+  const [filterProducts, setFilteredProducts] = useState([]);
+
   const router = useRouter();
   const { query } = router;
   const { id_number } = query;
-  const optionalQuery = id_number ? `id_number=${id_number}` : '';
+  const sortNameQuery = Object.keys(query)[0];
+  const sortTypeQuery = query[sortNameQuery];
+  const optionalQuery = id_number
+    ? `id_number=${id_number}`
+    : sortNameQuery
+    ? `${sortNameQuery}=${sortTypeQuery}`
+    : '';
   const { data, loading, refetch } = fetch({
     formatter: (res) => res,
-    additionalURL: `dashboard/?${optionalQuery}`
+    additionalURL: `dashboard/?${optionalQuery}`,
+    afterSuccess: (data, setData) => {
+      setData(data);
+      setFilteredProducts(data);
+    }
   });
-
   const {
     loading: loadingMutation,
     mutation,
@@ -71,22 +82,45 @@ function DashboardTable() {
   };
 
   const handleChange = (event) => {
-    const { value, name } = event.target;
-    if (value == '') {
-      router.push({
-        pathname: router.pathname
-        // query: { ...router.query, [name]: value }
-      });
-    }
-    setSearchQuery(value);
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, [name]: value }
+    const { value } = event.target;
+    let products = data.filter(({ id_number }) => {
+      return id_number.toLowerCase().includes(value.toLowerCase());
     });
+    setFilteredProducts(products);
+    setSearch(value);
+    router.replace({ pathname: router.pathname, query: {} });
   };
 
   const handleSearch = () => {
     refetch();
+  };
+
+  const handleSort = async (value) => {
+    const formatSortName = await formatterSortName(value);
+
+    // Check if the current sort direction is DESC
+    const isDesc = router.query[formatSortName] === 'DESC';
+
+    // Sort the data based on the formatSortName and the current sort direction
+    let sortedData = data.sort((a, b) => {
+      if (isDesc) {
+        if (a[formatSortName] < b[formatSortName]) return 1;
+        if (a[formatSortName] > b[formatSortName]) return -1;
+      } else {
+        if (a[formatSortName] < b[formatSortName]) return -1;
+        if (a[formatSortName] > b[formatSortName]) return 1;
+      }
+      return 0;
+    });
+
+    // Toggle the sort direction for the next click
+    const nextSortDirection = isDesc ? 'ASC' : 'DESC';
+
+    // Update the query string with the new sort parameter and sort direction
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, [formatSortName]: nextSortDirection }
+    });
   };
 
   const tableHead = [
@@ -108,7 +142,8 @@ function DashboardTable() {
     tableHead,
     handleImageClick,
     handleClosePreview,
-    previewImage
+    previewImage,
+    handleSort
   };
 
   const isEmptyData = data.length < 1;
@@ -118,6 +153,7 @@ function DashboardTable() {
   if (isEmptyData) {
     return <EmptyData />;
   }
+
   return (
     <>
       <Head>
@@ -144,7 +180,7 @@ function DashboardTable() {
             sx={{ ml: 1, flex: 1 }}
             placeholder="Search ID Number"
             name="id_number"
-            value={searchQuery}
+            value={search}
             inputProps={{ 'aria-label': 'search google maps' }}
             onChangeCapture={handleChange}
           />
@@ -159,7 +195,10 @@ function DashboardTable() {
         </Paper>
       </Container>
 
-      <TableComponent data={data} {...propsTable} />
+      <TableComponent
+        data={sortTypeQuery ? data : filterProducts}
+        {...propsTable}
+      />
       {previewImage && (
         <div
           style={{

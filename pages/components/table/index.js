@@ -1,8 +1,10 @@
 import { DeleteRounded } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import {
   Button,
   Container,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -18,7 +20,7 @@ import {
   colorDeciderForDashboard,
   typeTable
 } from '../../../hooks/decider/decider';
-import { dateFormatter, filterKeys } from '../../../hooks/formatter/formatter';
+import { dateFormatter } from '../../../hooks/formatter/formatter';
 
 const TableComponent = (route) => {
   const { data, ...propsTable } = route || {};
@@ -28,7 +30,8 @@ const TableComponent = (route) => {
     tableHead,
     handleClosePreview = () => {},
     handleImageClick = () => {},
-    previewImage = false
+    previewImage = false,
+    handleSort = () => {}
   } = propsTable || {};
   const { motorTable } = typeTable(type);
 
@@ -44,6 +47,18 @@ const TableComponent = (route) => {
               <TableHead>
                 <TableRow>
                   {tableHead?.map((column, index) => {
+                    const isNotShowSort = motorTable
+                      ? column == 'NO' ||
+                        column == 'ACTION' ||
+                        column == 'NAME PLATE' ||
+                        column == 'QRCODE' ||
+                        column == 'STATUS'
+                      : column == 'NO';
+                    const customStyleWidthMotor =
+                      motorTable &&
+                      (column == 'ID NUMBER' || column == 'NAME PLATE')
+                        ? { width: 150 }
+                        : {};
                     return (
                       <TableCell
                         key={index}
@@ -55,7 +70,27 @@ const TableComponent = (route) => {
                             : 'left'
                         }
                       >
-                        {column}
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            ...customStyleWidthMotor
+                          }}
+                        >
+                          {column}
+                          {!isNotShowSort && (
+                            <IconButton
+                              type="button"
+                              sx={{ p: '5px' }}
+                              aria-label="search"
+                              onClick={() => handleSort(column)}
+                            >
+                              <SwapVertIcon style={{ width: 15, height: 15 }} />
+                            </IconButton>
+                          )}
+                        </div>
                       </TableCell>
                     );
                   })}
@@ -80,17 +115,19 @@ const TableComponent = (route) => {
                   return (
                     <TableRow hover role="checkbox" key={item?.id}>
                       <>
-                        <TableCell>{index + 1}</TableCell>
+                        <TableCell align={'center'}>{index + 1}</TableCell>
 
-                        <TableCell>{motor?.id_number || id_number}</TableCell>
+                        <TableCell align={'center'}>
+                          {motor?.id_number || id_number}
+                        </TableCell>
                         {!!motorTable ? (
                           <>
                             <TableCell>{remarks}</TableCell>
                             <TableCell>{manufacturer}</TableCell>
-                            <TableCell>{voltage}</TableCell>
+                            <TableCell align={'center'}>{voltage}</TableCell>
                             <TableCell>{hp}</TableCell>
-                            <TableCell>{ac_dc}</TableCell>
-                            <TableCell>
+                            <TableCell align={'center'}>{ac_dc}</TableCell>
+                            <TableCell align={'center'}>
                               {
                                 <Image
                                   src={imgUrl}
@@ -187,8 +224,12 @@ const TableComponent = (route) => {
                                 {status?.description.toUpperCase()}
                               </div>
                             </TableCell>
-                            <TableCell>{dateFormatter(order_date)}</TableCell>
-                            <TableCell>{dateFormatter(finish_date)}</TableCell>
+                            <TableCell align={'center'}>
+                              {dateFormatter(order_date)}
+                            </TableCell>
+                            <TableCell align={'center'}>
+                              {dateFormatter(finish_date)}
+                            </TableCell>
                           </>
                         )}
                       </>
