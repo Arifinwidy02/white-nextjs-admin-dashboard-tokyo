@@ -5,7 +5,7 @@ const redirects = {
     return [
       {
         source: '/dashboards',
-        destination: '/dashboards/crypto',
+        destination: '/dashboards',
         permanent: true
       }
     ];
