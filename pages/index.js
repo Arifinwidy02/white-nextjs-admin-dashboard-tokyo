@@ -67,7 +67,7 @@ function Overview() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Christopher Roberto
+            Arifin Widyatmoko
           </Link>
         </Typography>
       </Container>
