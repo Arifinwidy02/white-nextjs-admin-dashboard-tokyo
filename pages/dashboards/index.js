@@ -118,8 +118,7 @@ function Dashboard() {
             Status
           </Typography>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {Object.keys(countingData).map((key) => {
-              console.log(countingData, "tipir")
+            {Object.keys(countingData)?.map((key) => {
               return (
                 <div
                   style={{ display: 'flex', flexDirection: 'row' }}
