@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Card, Container, Typography, styled } from '@mui/material';
 import BaseLayout from 'src/layouts/BaseLayout';
 
@@ -5,6 +7,7 @@ import Head from 'next/head';
 import Link from 'src/components/Link';
 
 import Hero from 'src/content/Overview/Hero';
+import { fetch } from '../hooks/api';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -26,6 +29,13 @@ const OverviewWrapper = styled(Box)(
 );
 
 function Overview() {
+  const { data, loading, refetch } = fetch({
+    additionalURL: 'dashboard',
+    formatter: (res) => res
+  });
+  const { data: listStatus, loading: loadingkampret } = fetch({
+    additionalURL: 'dashboard/status'
+  });
   return (
     <OverviewWrapper>
       <Head>

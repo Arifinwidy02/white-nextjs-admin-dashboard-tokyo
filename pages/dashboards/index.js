@@ -32,7 +32,7 @@ function Dashboard() {
 
   useEffect(() => {
     getCountingDataStatus();
-  }, []);
+  }, [countingData]);
   const isEmptyData = data.length < 1;
   if (loading) {
     return <Loading />;
