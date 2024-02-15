@@ -60,7 +60,7 @@ const UserBoxDescription = styled(Typography)(
 
 function HeaderUserbox() {
   const user = {
-    name: 'Christopher',
+    name: 'Admin',
     avatar: '/static/images/avatars/gyBlimp.jpg',
     jobtitle: 'Reliability Engineer'
   };
