@@ -1,4 +1,8 @@
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { motion } from 'framer-motion';
+
+import CancelIcon from '@mui/icons-material/Cancel';
 import {
   Box,
   Button,
@@ -13,7 +17,6 @@ import {
   styled
 } from '@mui/material';
 import Radio from '@mui/material/Radio';
-import Lottie from 'lottie-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -21,12 +24,10 @@ import { useForm } from 'react-hook-form';
 import { QrReader } from 'react-qr-reader';
 import Footer from 'src/components/Footer';
 import SidebarLayout from 'src/layouts/SidebarLayout';
+import Swal from 'sweetalert2';
 import { baseUrl, fetch, useMutation } from '../../../hooks/api';
 import { colorDeciderForDashboard } from '../../../hooks/decider/decider';
-import NewLoadingAnimation from '../../../public/animations/loading-new.json';
 import Form from '../../components/forms/new-form';
-import CancelIcon from '@mui/icons-material/Cancel';
-import Swal from 'sweetalert2';
 import { Loading } from '../../components/loading';
 
 const RootWrapper = styled(Box)(
@@ -42,6 +43,7 @@ function ChangeStatus() {
   const [defaultValue, setDefaultValue] = useState({ statusId: 0, qrcode: '' });
   const qrRef = useRef(null);
   const router = useRouter();
+  const isSmallScreen = useMediaQuery('(max-width: 460px)');
 
   const {
     data,
@@ -219,11 +221,26 @@ function ChangeStatus() {
                       ) : (
                         <>
                           <QrReader
-                            className="lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]"
+                            className={`lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]`}
                             onResult={handleScan}
                             constraints={{ facingMode: 'environment' }}
                             style={{ width: '40%', height: '40%' }}
                             ref={qrRef}
+                          />
+                          <motion.div
+                            style={{
+                              position: 'absolute',
+                              width: isSmallScreen ? '83%' : 375,
+                              height: '2px',
+                              backgroundColor: '#00ff00' // Change the color as needed
+                            }}
+                            initial={{ top: 225 }}
+                            animate={{ top: isSmallScreen ? 450 : 500 }}
+                            transition={{
+                              duration: 1.5,
+                              repeat: Infinity,
+                              repeatType: 'reverse'
+                            }}
                           />
                         </>
                       )}
