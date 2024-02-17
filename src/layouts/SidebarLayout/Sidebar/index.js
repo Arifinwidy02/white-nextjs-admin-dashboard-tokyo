@@ -4,18 +4,19 @@ import { SidebarContext } from 'src/contexts/SidebarContext';
 
 import {
   Box,
+  Container,
+  Divider,
   Drawer,
   alpha,
-  styled,
-  Divider,
-  useTheme,
-  Button,
+  darken,
   lighten,
-  darken
+  styled,
+  useTheme
 } from '@mui/material';
 
-import SidebarMenu from './SidebarMenu';
+import Image from 'next/image';
 import Logo from 'src/components/LogoSign';
+import SidebarMenu from './SidebarMenu';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -54,19 +55,21 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
-          <Box mt={3}>
-            <Box
-              mx={2}
-              sx={{
-                width: 52
+          <Container maxWidth="lg" style={{ height: 50 }}>
+            <Image
+              src={'/static/images/logo/goodyear-logo.png'}
+              alt="logo"
+              width={250}
+              height={250}
+              style={{
+                overflow: 'hidden',
+                marginTop: -75,
+                filter: 'invert(1)'
               }}
-            >
-              <Logo />
-            </Box>
-          </Box>
+            />
+          </Container>
           <Divider
             sx={{
-              mt: theme.spacing(3),
               mx: theme.spacing(2),
               background: theme.colors.alpha.trueWhite[10]
             }}

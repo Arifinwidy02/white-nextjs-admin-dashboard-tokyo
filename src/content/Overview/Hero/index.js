@@ -9,8 +9,6 @@ import {
   styled
 } from '@mui/material';
 
-import Link from 'src/components/Link';
-
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
     font-size: ${theme.typography.pxToRem(50)};
@@ -97,9 +95,9 @@ const NextJsAvatar = styled(Box)(
 `
 );
 
-function Hero() {
+function Hero({ onClick }) {
   return (
-    <Container maxWidth="lg" sx={{ textAlign: 'center' }}>
+    <Container maxWidth="100%" style={{ marginLeft: -150 }}>
       <Grid
         spacing={{ xs: 6, md: 10 }}
         justifyContent="center"
@@ -120,75 +118,9 @@ function Hero() {
             Unlocking the power of good management stock for sustainable growth
             and success.
           </TypographyH2>
-          <Button
-            component={Link}
-            href="/dashboards"
-            size="large"
-            variant="contained"
-          >
+          <Button size="large" variant="contained" onClick={onClick}>
             Let's Drive
           </Button>
-          {/* <Button
-            sx={{ ml: 2 }}
-            component="a"
-            target="_blank"
-            rel="noopener"
-            href="https://bloomui.com/product/tokyo-free-white-nextjs-javascript-material-ui-admin-dashboard/"
-            size="large"
-            variant="text"
-          >
-            Key Features
-          </Button> */}
-          {/* <Grid container spacing={3} mt={5}>
-            <Grid item md={4}>
-              <MuiAvatar>
-                <img
-                  src="/static/images/logo/material-ui.svg"
-                  alt="Material-UI"
-                />
-              </MuiAvatar>
-              <Typography variant="h4">
-                <Box sx={{ pb: 2 }}>
-                  <b>Powered by MUI (Material-UI)</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  A simple and customizable component library to build faster,
-                  beautiful, and accessible React apps.
-                </Typography>
-              </Typography>
-            </Grid>
-            <Grid item md={4}>
-              <NextJsAvatar>
-                <img src="/static/images/logo/next-js.svg" alt="NextJS" />
-              </NextJsAvatar>
-              <Typography variant="h4">
-                <Box sx={{ pb: 2 }}>
-                  <b>Built with Next.js</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  Next.js gives you the best developer experience with all the
-                  features you need for production.
-                </Typography>
-              </Typography>
-            </Grid>
-            <Grid item md={4}>
-              <JsAvatar>
-                <img
-                  src="/static/images/logo/javascript.svg"
-                  alt="Javascript"
-                />
-              </JsAvatar>
-              <Typography variant="h4">
-                <Box sx={{ pb: 2 }}>
-                  <b>Built with Javascript</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  Tokyo features a modern technology stack and is built with
-                  React + Javascript.
-                </Typography>
-              </Typography>
-            </Grid>
-          </Grid> */}
         </Grid>
       </Grid>
     </Container>

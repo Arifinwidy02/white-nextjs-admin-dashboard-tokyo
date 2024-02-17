@@ -1,13 +1,14 @@
 'use client';
 
-import { Box, Card, Container, Typography, styled } from '@mui/material';
+import { Box, Card, Container, styled } from '@mui/material';
 import BaseLayout from 'src/layouts/BaseLayout';
 
 import Head from 'next/head';
-import Link from 'src/components/Link';
-
+import Image from 'next/image';
+import { useState } from 'react';
+import LogoAnimation from 'src/components/LoadingLogo';
 import Hero from 'src/content/Overview/Hero';
-import { fetch } from '../hooks/api';
+import GoodyearLogo from '../public/static/images/logo/goodyear-logo-vector.svg';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -20,22 +21,25 @@ const HeaderWrapper = styled(Card)(
 );
 
 const OverviewWrapper = styled(Box)(
-  ({ theme }) => `
+  ({ theme }) =>
+    `
     overflow: auto;
-    background: ${theme.palette.common.white};
+    background: url('/static/images/background/Background.jpg');
+    background-size: cover;
+    background-position: center;
     flex: 1;
     overflow-x: hidden;
 `
 );
 
 function Overview() {
-  const { data, loading, refetch } = fetch({
-    additionalURL: 'dashboard',
-    formatter: (res) => res
-  });
-  const { data: listStatus, loading: loadingkampret } = fetch({
-    additionalURL: 'dashboard/status'
-  });
+  const [isAnimating, setIsAnimating] = useState(false);
+  const onClick = () => {
+    setIsAnimating(true);
+  };
+  if (isAnimating) {
+    return <LogoAnimation isAnimating={isAnimating} />;
+  }
   return (
     <OverviewWrapper>
       <Head>
@@ -44,9 +48,9 @@ function Overview() {
       <HeaderWrapper>
         <Container maxWidth="lg">
           <Box display="flex" alignItems="center">
-            {/* <div>
-             Logo should here
-            </div> */}
+            <div>
+              <Image src={GoodyearLogo} alt="logo" width={200} height={200} />
+            </div>
             <Box
               display="flex"
               alignItems="center"
@@ -58,19 +62,7 @@ function Overview() {
           </Box>
         </Container>
       </HeaderWrapper>
-      <Hero />
-      <Container maxWidth="lg" sx={{ mt: 8 }}>
-        <Typography textAlign="center" variant="subtitle1">
-          Crafted by{' '}
-          <Link
-            href="https://bloomui.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Arifin Widyatmoko
-          </Link>
-        </Typography>
-      </Container>
+      <Hero onClick={onClick} />
     </OverviewWrapper>
   );
 }
