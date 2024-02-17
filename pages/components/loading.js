@@ -24,7 +24,7 @@ export const Loading = () => {
         height: '100%'
       }}
     >
-      <div style={{ width: 250, height: 250 }}>
+      <div style={{ width: 250, height: '100%' }}>
         <Lottie animationData={NewLoadingAnimation} />
       </div>
     </div>

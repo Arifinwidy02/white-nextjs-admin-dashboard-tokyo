@@ -19,16 +19,16 @@ const LogoAnimation = ({ isAnimating }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%'
+        width: '100%',
+        padding: 100
       }}
     >
       <motion.div
+        className="responsive-width"
         initial={{ opacity: 0, scale: 0 }}
         animate={isAnimating ? { opacity: 1, scale: 1 } : {}}
         transition={{ ease: 'easeIn', duration: 1.5 }}
         style={{
-          width: '400px',
-          height: '400px',
           color: 'white',
           display: 'flex',
           justifyContent: 'center',

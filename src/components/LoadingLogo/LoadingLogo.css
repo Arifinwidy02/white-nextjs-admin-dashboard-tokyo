@@ -1,0 +1,24 @@
+.responsive-width {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .responsive-width {
+    width: 400px;
+    height: 400px;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-width {
+    width: 600px;
+    height: 600;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-width {
+    width: 800px;
+    height: 800;
+  }
+}

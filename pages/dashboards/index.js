@@ -34,9 +34,6 @@ function Dashboard() {
     getCountingDataStatus();
   }, [countingData]);
   const isEmptyData = data.length < 1;
-  if (loading) {
-    return <Loading />;
-  }
 
   if (isEmptyData) {
     return <EmptyData />;
@@ -64,6 +61,18 @@ function Dashboard() {
           marginLeft: 30
         }}
       >
+        {loading && (
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Loading />
+          </div>
+        )}
         {data?.map(({ status, id_number, id }) => {
           return (
             <div
@@ -103,7 +112,6 @@ function Dashboard() {
                   display: 'flex'
                 }}
               >
-                {/* <Typography variant="h5" component="h5"> */}
                 <Typography variant="button" display="block" gutterBottom>
                   {status?.description.toUpperCase()}
                 </Typography>

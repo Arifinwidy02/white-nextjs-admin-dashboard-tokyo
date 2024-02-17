@@ -106,8 +106,7 @@ function CreateMotor() {
           justifyContent: 'center',
           alignItems: 'center',
           flexWrap: 'wrap',
-          marginTop: 10,
-          marginLeft: 30
+          marginTop: 10
         }}
       >
         <Form>
@@ -175,7 +174,6 @@ function CreateMotor() {
                       <TextField
                         id="outlined-select-currency"
                         select
-                        label="AC / DC"
                         value={acDC}
                         onChange={handleChange}
                         required

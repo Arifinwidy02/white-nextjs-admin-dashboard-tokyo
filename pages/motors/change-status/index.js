@@ -116,8 +116,7 @@ function ChangeStatus() {
           justifyContent: 'center',
           alignItems: 'center',
           flexWrap: 'wrap',
-          marginTop: 10,
-          marginLeft: 30
+          marginTop: 10
         }}
       >
         <Form>

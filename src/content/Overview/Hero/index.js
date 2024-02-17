@@ -105,7 +105,7 @@ function Hero({ onClick }) {
       style={{
         textAlign: isBelow500 ? 'center' : 'left',
         marginLeft: isBelow1440 ? 20 : -150,
-        paddingRight: 10
+        marginRight: 50
       }}
     >
       <Grid
@@ -113,6 +113,7 @@ function Hero({ onClick }) {
         justifyContent="center"
         alignItems="center"
         container
+        style={{ paddingRight: 50 }}
       >
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
