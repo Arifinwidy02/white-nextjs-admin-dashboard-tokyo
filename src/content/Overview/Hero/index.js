@@ -6,7 +6,8 @@ import {
   Container,
   Grid,
   Typography,
-  styled
+  styled,
+  useMediaQuery
 } from '@mui/material';
 
 const TypographyH1 = styled(Typography)(
@@ -96,8 +97,17 @@ const NextJsAvatar = styled(Box)(
 );
 
 function Hero({ onClick }) {
+  const isBelow1440 = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+  const isBelow500 = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   return (
-    <Container maxWidth="100%" style={{ marginLeft: -150 }}>
+    <Container
+      maxWidth="lg"
+      style={{
+        textAlign: isBelow500 ? 'center' : 'left',
+        marginLeft: isBelow1440 ? 20 : -150,
+        paddingRight: 10
+      }}
+    >
       <Grid
         spacing={{ xs: 6, md: 10 }}
         justifyContent="center"

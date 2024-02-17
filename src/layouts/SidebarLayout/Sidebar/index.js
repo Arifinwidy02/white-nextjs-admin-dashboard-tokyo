@@ -55,7 +55,7 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
-          <Container maxWidth="lg" style={{ height: 50 }}>
+          <Container maxWidth="lg" style={{ height: 75 }}>
             <Image
               src={'/static/images/logo/goodyear-logo.png'}
               alt="logo"
