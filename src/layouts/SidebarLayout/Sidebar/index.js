@@ -56,7 +56,7 @@ function Sidebar() {
       >
         <Scrollbar>
           <Container maxWidth="lg" style={{ height: 75 }}>
-            <Image
+            <img
               src={'/static/images/logo/goodyear-logo.png'}
               alt="logo"
               width={250}
@@ -64,8 +64,10 @@ function Sidebar() {
               style={{
                 overflow: 'hidden',
                 marginTop: -75,
-                filter: 'invert(1)'
+                filter: 'invert(1)',
+                objectFit: 'cover'
               }}
+              layout="fixed"
             />
           </Container>
           <Divider

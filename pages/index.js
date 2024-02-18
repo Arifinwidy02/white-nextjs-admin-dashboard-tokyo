@@ -62,7 +62,15 @@ function Overview() {
           </Box>
         </Container>
       </HeaderWrapper>
-      <Hero onClick={onClick} />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          marginTop: 200
+        }}
+      >
+        <Hero onClick={onClick} />
+      </div>
     </OverviewWrapper>
   );
 }
