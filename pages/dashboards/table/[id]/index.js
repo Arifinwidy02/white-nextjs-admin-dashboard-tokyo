@@ -13,8 +13,7 @@ import {
   Icon,
   MenuItem,
   RadioGroup,
-  TextField,
-  styled
+  TextField
 } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import Head from 'next/head';
@@ -30,12 +29,6 @@ import { handleImageUploadFunction } from '../../../../hooks/logic/general';
 import Form from '../../../components/forms/new-form';
 import { Loading } from '../../../components/loading';
 
-const RootWrapper = styled(Box)(
-  ({ theme }) => `
-    height: calc(100vh - ${theme.header.height});
-    display: flex;
-    `
-);
 function DashboardTableEdit() {
   const route = useRouter();
   const { id = 1 } = route.query;

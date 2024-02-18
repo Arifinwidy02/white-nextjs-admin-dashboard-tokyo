@@ -1,4 +1,5 @@
 import { PhotoCamera } from '@mui/icons-material';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {
   Box,
   Button,
@@ -11,34 +12,21 @@ import {
   Icon,
   MenuItem,
   RadioGroup,
-  TextField,
-  styled
+  TextField
 } from '@mui/material';
 import Radio from '@mui/material/Radio';
-import Lottie from 'lottie-react';
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import Footer from 'src/components/Footer';
 import SidebarLayout from 'src/layouts/SidebarLayout';
-import { baseUrl, fetch, useMutation } from '../../../hooks/api';
-import NewLoadingAnimation from '../../../public/animations/loading-new.json';
-import Form from '../../components/forms/new-form';
-import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
-import CancelIcon from '@mui/icons-material/Cancel';
-import {
-  compressImage,
-  finalDataFormatter
-} from '../../../hooks/formatter/formatter';
 import Swal from 'sweetalert2';
+import { baseUrl, fetch, useMutation } from '../../../hooks/api';
+import { finalDataFormatter } from '../../../hooks/formatter/formatter';
 import { handleImageUploadFunction } from '../../../hooks/logic/general';
+import Form from '../../components/forms/new-form';
 import { Loading } from '../../components/loading';
 
-const RootWrapper = styled(Box)(
-  ({ theme }) => `
-    height: calc(100vh - ${theme.header.height});
-    display: flex;
-    `
-);
 function CreateMotor() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [acDC, setACDC] = useState('AC');

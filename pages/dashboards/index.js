@@ -1,4 +1,4 @@
-import { Box, Typography, styled } from '@mui/material';
+import { Typography } from '@mui/material';
 import Lottie from 'lottie-react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -13,12 +13,6 @@ import MotorAnimation from '../../public/animations/motor-list.json';
 import EmptyData from '../components/empty-data';
 import { Loading } from '../components/loading';
 
-const RootWrapper = styled(Box)(
-  ({ theme }) => `
-       height: calc(100vh - ${theme.header.height});
-       display: flex;
-`
-);
 function Dashboard() {
   const [countingData, setCountingData] = useState([]);
   const { data, loading, refetch } = fetch({

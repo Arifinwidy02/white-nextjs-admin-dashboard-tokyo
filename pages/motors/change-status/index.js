@@ -13,8 +13,7 @@ import {
   FormLabel,
   Icon,
   RadioGroup,
-  Typography,
-  styled
+  Typography
 } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import Head from 'next/head';
@@ -30,12 +29,6 @@ import { colorDeciderForDashboard } from '../../../hooks/decider/decider';
 import Form from '../../components/forms/new-form';
 import { Loading } from '../../components/loading';
 
-const RootWrapper = styled(Box)(
-  ({ theme }) => `
-    height: calc(100vh - ${theme.header.height});
-    display: flex;
-    `
-);
 function ChangeStatus() {
   const { handleSubmit, register, reset } = useForm();
   const [scanResult, setScanResult] = useState('No result');
