@@ -105,7 +105,8 @@ function Hero({ onClick }) {
       style={{
         textAlign: isBelow500 ? 'center' : 'left',
         marginLeft: isBelow1440 ? 20 : -150,
-        marginRight: 50
+        marginRight: 50,
+        marginBottom: 20
       }}
     >
       <Grid

@@ -1,15 +1,17 @@
-const withImages = require('next-images');
+// module.exports = withImages(redirects);
 
-const redirects = {
-  async redirects() {
-    return [
-      {
-        source: '/dashboards',
-        destination: '/dashboards',
-        permanent: true
-      }
-    ];
-  }
-};
+// const withImages = require('next-images');
 
-module.exports = withImages(redirects);
+// const redirects = {
+//   async redirects() {
+//     return [
+//       {
+//         source: '/dashboards',
+//         destination: '/dashboards/table',
+//         permanent: true
+//       }
+//     ];
+//   }
+// };
+
+// module.exports = withImages(redirects);
