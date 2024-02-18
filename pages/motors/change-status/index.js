@@ -220,21 +220,23 @@ function ChangeStatus() {
                             style={{ width: '40%', height: '40%' }}
                             ref={qrRef}
                           />
-                          <motion.div
-                            style={{
-                              position: 'absolute',
-                              width: isSmallScreen ? '83%' : 375,
-                              height: '2px',
-                              backgroundColor: '#00ff00' // Change the color as needed
-                            }}
-                            initial={{ top: 225 }}
-                            animate={{ top: isSmallScreen ? 450 : 500 }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              repeatType: 'reverse'
-                            }}
-                          />
+                          {!isSmallScreen && (
+                            <motion.div
+                              style={{
+                                position: 'absolute',
+                                width: isSmallScreen ? '83%' : 375,
+                                height: '2px',
+                                backgroundColor: '#00ff00' // Change the color as needed
+                              }}
+                              initial={{ top: 225 }}
+                              animate={{ top: isSmallScreen ? 450 : 500 }}
+                              transition={{
+                                duration: 1.5,
+                                repeat: Infinity,
+                                repeatType: 'reverse'
+                              }}
+                            />
+                          )}
                         </>
                       )}
                     </label>
